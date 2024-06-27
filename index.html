@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quizzit</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <div id="questioncontainer" class="hide">
+            <h1 id="question">Question:</h1>
+            <div id="answer_buttons"class="answers">
+                <button class="btn-correct"><h3>answer1</h3></button>
+                <button class="btn"><h3>answer2</h3></button>
+                <button class="btn"><h3>answer3</h3></button>
+                <button class="btn"><h3>answer4</h3></button>
+            </div> 
+        </div>
+        <div class="controls">
+            <button id="start" class="control-btn">Start</button>
+            <button id="next" name="nextb" class="control-btn">Next</button>
+        </div>
+    </div> 
+    <script>
+        const startButton = document.getElementById("start");
+        const nextButton = document.getElementById("next");
+        const questionContainerElement = document.getElementById("questioncontainer");
+        let shuffledQuestions, currentQuestionIndex;
+        const questionElement = document.getElementById("question");
+        const answerButtonsElement = document.getElementById("answer_buttons");
+        let score=0;
+        nextButton.classList.add("hide")
+        startButton.addEventListener("click", startGame);
+        nextButton.addEventListener("click", () => {
+            currentQuestionIndex++;
+            setNextQuestion();
+        });
+
+        function startGame() {
+            console.log("Start");
+            startButton.classList.add("hide");
+            shuffledQuestions = questions.sort(() => Math.random() - 0.5);
+            currentQuestionIndex = 0;
+            score=0;
+            questionContainerElement.classList.remove("hide");
+            setNextQuestion();
+        }
+
+        function setNextQuestion() {
+            resetState();
+            showQuestion(shuffledQuestions[currentQuestionIndex]);
+        }
+
+        function showQuestion(question) {
+            questionElement.innerText = question.question;
+            question.answers.forEach(answer => {
+                const button = document.createElement("button");
+                button.innerText = answer.text;
+                button.classList.add("btn");
+                if (answer.correct) {
+                    button.dataset.correct = answer.correct;
+                }
+                button.addEventListener("click", selectAnswer);
+                answerButtonsElement.appendChild(button);
+            });
+        }
+
+        function resetState() {
+            clearStatusClass(document.body);
+            nextButton.classList.add("hide");
+            while (answerButtonsElement.firstChild) {
+                answerButtonsElement.removeChild(answerButtonsElement.firstChild);
+            }
+        }
+        function selectAnswer(e) {
+            const selectedButton = e.target;
+            const correct = selectedButton.dataset.correct;
+            if (correct){
+                score++;
+            }
+            setStatusClass(document.body, correct);
+            Array.from(answerButtonsElement.children).forEach(button => {
+                setStatusClass(button, button.dataset.correct);
+                button.disabled = true;
+            });
+            selectedButton.classList.add('selected');
+            if (shuffledQuestions.length > currentQuestionIndex + 1) {
+                nextButton.classList.remove("hide");
+            } else {
+                showScore();
+            }
+            
+        }
+        function setStatusClass(element, correct) {
+            clearStatusClass(element);
+            if (correct) {
+                element.classList.add("correct");
+            } else {
+                element.classList.add("wrong");
+            }
+        }
+        function clearStatusClass(element) {
+            element.classList.remove("correct");
+            element.classList.remove("wrong");
+        }
+
+        function showScore() {
+            resetState();
+            questionElement.innerText = `Your score is ${score} out of ${questions.length}!`;
+            startButton.innerText = "Restart";
+            startButton.classList.remove("hide");
+        }
+        const questions = [
+            {
+                question: 'What is 2+2?',
+                answers: [
+                    { text: '4', correct: true },
+                    { text: '22', correct: false },
+                    { text: '33', correct: false },
+                    { text: '100', correct: false }
+                ]
+            },
+            {
+                question: 'Where is Tunisia?',
+                answers: [
+                    { text: 'Asia', correct: false },
+                    { text: 'Africa', correct: true },
+                    { text: 'America', correct: false },
+                    { text: 'Europe', correct: false }
+                ]
+            },
+            {
+                question: 'What is 4 * 2?',
+                answers: [
+                { text: '6', correct: false },
+                { text: '8', correct: true }
+                ]
+            }
+
+        ];
+
+    </script>
+</body>
+</html>
