@@ -58,4 +58,9 @@ body{
 .btn.selected{
     background-color: #99ccff;
 }
-
+.logo   {
+    position: absolute;
+    top: 0;
+    display: flex;
+    justify-content: center;
+}
