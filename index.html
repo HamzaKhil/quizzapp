@@ -1,29 +1,29 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Quizzit</title>
-    <link rel="stylesheet" href="style.css">
-    <img class="logo" src="quizit.png" alt="quizit logo" width="200" height="200">
-</head>
-<body>
-    <div class="container">
-        <div id="questioncontainer" class="hide">
-            <h1 id="question">Question:</h1>
-            <div id="answer_buttons"class="answers">
-                <button class="btn-correct"><h3>answer1</h3></button>
-                <button class="btn"><h3>answer2</h3></button>
-                <button class="btn"><h3>answer3</h3></button>
-                <button class="btn"><h3>answer4</h3></button>
-            </div> 
-        </div>
-        <div class="controls">
-            <button id="start" class="control-btn">Start</button>
-            <button id="next" name="nextb" class="control-btn">Next</button>
-        </div>
-    </div> 
-    <script>
+    <!DOCTYPE html>
+    <html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Quizzit</title>
+        <link rel="stylesheet" href="style.css">
+        <img class="logo" src="quizit.png" alt="quizit logo" width="180" height="180">
+    </head>
+    <body>
+        <div class="container">
+            <div id="questioncontainer" class="hide">
+                <h1 id="question">Question:</h1>
+                <div id="answer_buttons"class="answers">
+                    <button class="btn-correct"><h3>answer1</h3></button>
+                    <button class="btn"><h3>answer2</h3></button>
+                    <button class="btn"><h3>answer3</h3></button>
+                    <button class="btn"><h3>answer4</h3></button>
+                </div> 
+            </div>
+            <div class="controls">
+                <button id="start" class="control-btn">Start</button>
+                <button id="next" name="nextb" class="control-btn">Next</button>
+            </div>
+        </div> 
+        <script>
         const startButton = document.getElementById("start");
         const nextButton = document.getElementById("next");
         const questionContainerElement = document.getElementById("questioncontainer");
@@ -39,11 +39,10 @@
         });
 
         function startGame() {
-            console.log("Start");
             startButton.classList.add("hide");
-            shuffledQuestions = questions.sort(() => Math.random() - 0.5);
+            shuffledQuestions = topicselect().sort(() => Math.random() - 0.5);
             currentQuestionIndex = 0;
-            score=0;
+            score = 0;
             questionContainerElement.classList.remove("hide");
             setNextQuestion();
         }
@@ -74,15 +73,16 @@
                 answerButtonsElement.removeChild(answerButtonsElement.firstChild);
             }
         }
+
         function selectAnswer(e) {
             const selectedButton = e.target;
-            const correct = selectedButton.dataset.correct;
-            if (correct){
+            const correct = selectedButton.dataset.correct === "true";
+            if (correct) {
                 score++;
             }
             setStatusClass(document.body, correct);
             Array.from(answerButtonsElement.children).forEach(button => {
-                setStatusClass(button, button.dataset.correct);
+                setStatusClass(button, button.dataset.correct === "true");
                 button.disabled = true;
             });
             selectedButton.classList.add('selected');
@@ -91,8 +91,8 @@
             } else {
                 showScore();
             }
-            
         }
+
         function setStatusClass(element, correct) {
             clearStatusClass(element);
             if (correct) {
@@ -101,6 +101,7 @@
                 element.classList.add("wrong");
             }
         }
+
         function clearStatusClass(element) {
             element.classList.remove("correct");
             element.classList.remove("wrong");
@@ -108,39 +109,159 @@
 
         function showScore() {
             resetState();
-            questionElement.innerText = `Your score is ${score} out of ${questions.length}!`;
+            questionElement.innerText = `Your score is ${score} out of ${shuffledQuestions.length}!`;
             startButton.innerText = "Restart";
             startButton.classList.remove("hide");
         }
-        const questions = [
-            {
-                question: 'What is 2+2?',
-                answers: [
-                    { text: '4', correct: true },
-                    { text: '22', correct: false },
-                    { text: '33', correct: false },
-                    { text: '100', correct: false }
-                ]
-            },
-            {
-                question: 'Where is Tunisia?',
-                answers: [
-                    { text: 'Asia', correct: false },
-                    { text: 'Africa', correct: true },
-                    { text: 'America', correct: false },
-                    { text: 'Europe', correct: false }
-                ]
-            },
-            {
-                question: 'What is 4 * 2?',
-                answers: [
-                { text: '6', correct: false },
-                { text: '8', correct: true }
-                ]
-            }
 
+        const topics = [
+            [
+                {
+                    question: 'Who was the first President of the United States?',
+                    answers: [
+                        { text: 'George Washington', correct: true },
+                        { text: 'Thomas Jefferson', correct: false },
+                        { text: 'John Adams', correct: false },
+                        { text: 'James Madison', correct: false }
+                    ]
+                },
+                {
+                    question: 'What year did World War II end?',
+                    answers: [
+                        { text: '1945', correct: true },
+                        { text: '1944', correct: false },
+                        { text: '1946', correct: false },
+                        { text: '1943', correct: false }
+                    ]
+                },
+                {
+                    question: 'Who was the first person to land on the moon?',
+                    answers: [
+                        { text: 'Neil Armstrong', correct: true },
+                        { text: 'Buzz Aldrin', correct: false },
+                        { text: 'Michael Collins', correct: false },
+                        { text: 'Yuri Gagarin', correct: false }
+                    ]
+                },
+                {
+                    question: 'In which year did the Titanic sink?',
+                    answers: [
+                        { text: '1912', correct: true },
+                        { text: '1913', correct: false },
+                        { text: '1911', correct: false },
+                        { text: '1910', correct: false }
+                    ]
+                },
+                {
+                    question: 'Who was the British Prime Minister during World War II?',
+                    answers: [
+                        { text: 'Winston Churchill', correct: true },
+                        { text: 'Neville Chamberlain', correct: false },
+                        { text: 'Clement Attlee', correct: false },
+                        { text: 'Anthony Eden', correct: false }
+                    ]
+                }
+            ],
+            [
+                {
+                    question: 'What is the correct indefinite article for "chat" (cat) in French?',
+                    answers: [
+                        { text: 'Un', correct: true },
+                        { text: 'Une', correct: false },
+                        { text: 'Des', correct: false },
+                        { text: 'Le', correct: false }
+                    ]
+                },
+                {
+                    question: 'Which of the following is the correct conjugation of "être" in the first person singular?',
+                    answers: [
+                        { text: 'Es', correct: false },
+                        { text: 'Suis', correct: true },
+                        { text: 'Est', correct: false },
+                        { text: 'Sommes', correct: false }
+                    ]
+                },
+                {
+                    question: 'What is the plural form of "cheval" (horse) in French?',
+                    answers: [
+                        { text: 'Chevaux', correct: true },
+                        { text: 'Chevals', correct: false },
+                        { text: 'Cheveau', correct: false },
+                        { text: 'Chevaus', correct: false }
+                    ]
+                },
+                {
+                    question: 'Which of the following is the correct translation of "We are going" in French?',
+                    answers: [
+                        { text: 'Nous allons', correct: true },
+                        { text: 'Vous allez', correct: false },
+                        { text: 'Ils vont', correct: false },
+                        { text: 'Je vais', correct: false }
+                    ]
+                },
+                {
+                    question: 'What is the correct feminine form of the adjective "beau" (beautiful) in French?',
+                    answers: [
+                        { text: 'Belle', correct: true },
+                        { text: 'Beau', correct: false },
+                        { text: 'Beaux', correct: false },
+                        { text: 'Bel', correct: false }
+                    ]
+                }
+            ],
+            [
+                {
+                    question: 'Who won the FIFA World Cup in 2018?',
+                    answers: [
+                        { text: 'France', correct: true },
+                        { text: 'Croatia', correct: false },
+                        { text: 'Brazil', correct: false },
+                        { text: 'Germany', correct: false }
+                    ]
+                },
+                {
+                    question: 'Which player has won the most Ballon d\'Or awards?',
+                    answers: [
+                        { text: 'Lionel Messi', correct: true },
+                        { text: 'Cristiano Ronaldo', correct: false },
+                        { text: 'Michel Platini', correct: false },
+                        { text: 'Johan Cruyff', correct: false }
+                    ]
+                },
+                {
+                    question: 'Which country has won the most FIFA World Cups?',
+                    answers: [
+                        { text: 'Brazil', correct: true },
+                        { text: 'Germany', correct: false },
+                        { text: 'Italy', correct: false },
+                        { text: 'Argentina', correct: false }
+                    ]
+                },
+                {
+                    question: 'Who is the all-time top scorer in the UEFA Champions League?',
+                    answers: [
+                        { text: 'Cristiano Ronaldo', correct: true },
+                        { text: 'Lionel Messi', correct: false },
+                        { text: 'Raúl González', correct: false },
+                        { text: 'Karim Benzema', correct: false }
+                    ]
+                },
+                {
+                    question: 'Which club has won the most UEFA Champions League titles?',
+                    answers: [
+                        { text: 'Real Madrid', correct: true },
+                        { text: 'AC Milan', correct: false },
+                        { text: 'Liverpool', correct: false },
+                        { text: 'Bayern Munich', correct: false }
+                    ]
+                }
+            ]
         ];
 
-    </script>
-</body>
-</html>
+function topicselect() {
+    const randomizer = Math.floor(Math.random() * topics.length);
+    return topics[randomizer];
+}
+        </script>
+    </body>
+    </html>
