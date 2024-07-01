@@ -8,6 +8,7 @@
         <img class="logo" src="quizit.png" alt="quizit logo" width="180" height="180">
     </head>
     <body>
+        <button id="infoButton" class="control-btn-rules">Show Rules</button>
         <div class="container">
             <div id="questioncontainer" class="hide">
                 <h1 id="question">Question:</h1>
@@ -22,7 +23,21 @@
                 <button id="start" class="control-btn">Start</button>
                 <button id="next" name="nextb" class="control-btn">Next</button>
             </div>
+    
         </div> 
+
+            <div id="infoBox" class="modal hide">
+                <div class="modal-content">
+                    <span id="closeButton" class="close">&times;</span>
+                    <h2>Quiz Rules</h2>
+                    <p>1. Each question has four possible answers.</p>
+                    <p>2. Only one answer is correct</p>
+                    <p>3. You can only select an answer once</p>
+                    <p>4. Click the correct answer to gain points.</p>
+                    <p>5. Click "Next" to proceed to the next question.</p>
+                    <p>6. Your final score will be displayed at the end.</p>
+                </div>
+            </div>
         <script>
         const startButton = document.getElementById("start");
         const nextButton = document.getElementById("next");
@@ -31,6 +46,24 @@
         const questionElement = document.getElementById("question");
         const answerButtonsElement = document.getElementById("answer_buttons");
         let score=0;
+        const infoButton = document.getElementById("infoButton");
+        const infoBox = document.getElementById("infoBox");
+        const closeButton = document.getElementById("closeButton");
+
+        infoButton.addEventListener("click", () => {
+            infoBox.classList.remove("hide");
+            infoBox.style.display = "block";
+        });
+
+        closeButton.addEventListener("click", () => {
+            infoBox.style.display = "none";
+        });
+
+        window.addEventListener("click", (event) => {
+            if (event.target == infoBox) {
+                infoBox.style.display = "none";
+            }
+        });
         nextButton.classList.add("hide")
         startButton.addEventListener("click", startGame);
         nextButton.addEventListener("click", () => {
